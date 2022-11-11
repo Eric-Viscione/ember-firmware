@@ -221,9 +221,9 @@ bool Motor::GoToStartPosition()
 }
 
 // Separate the current layer 
-bool Motor::Separate(const CurrentLayerSettings& cls)
+bool Motor::Separate(const CurrentLayerSettings& cls, _printerStatus._currentLayer)
 {
-    std::vector<MotorCommand> commands;
+        std::vector<MotorCommand> commands;
 
     // rotate the previous layer from the PDMS
     commands.push_back(MotorCommand(MC_ROT_SETTINGS_REG, MC_JERK, 
@@ -235,26 +235,31 @@ bool Motor::Separate(const CurrentLayerSettings& cls)
     if (rotation != 0)
         commands.push_back(MotorCommand(MC_ROT_ACTION_REG, MC_MOVE, -rotation));
     
-    // lift the build platform
+    // lift the build platform I modified this so that every other layer it does not seperate. 
+if
+
     commands.push_back(MotorCommand(MC_Z_SETTINGS_REG, MC_JERK, 
                                     cls.SeparationZJerk));
     commands.push_back(MotorCommand(MC_Z_SETTINGS_REG, MC_SPEED, 
                                  cls.SeparationMicronsPerSec * Z_SPEED_FACTOR));
-    
-    if (cls.ZLiftMicrons != 0)
-        commands.push_back(MotorCommand(MC_Z_ACTION_REG, MC_MOVE, 
-                                                            cls.ZLiftMicrons));
-    
-    // request an interrupt when these commands are completed
+    if((_printerStatus._currentLayer%4 == 1) ||(_printerStatus._currentLayer%4 == 3)){
+        if (cls.ZLiftMicrons != 0) 
+                commands.push_back(MotorCommand(MC_Z_ACTION_REG, MC_MOVE, 
+                                                                    cls.ZLiftMicrons));
+    }
+  
+        // request an interrupt when these commands are completed
     commands.push_back(MotorCommand(MC_GENERAL_REG, MC_INTERRUPT));
     
     return SendCommands(commands);
+
 }
 
 // Go to the position for exposing the next layer (with optional jam recovery
 // motion first). 
 bool Motor::Approach(const CurrentLayerSettings& cls, bool unJamFirst)
 {
+    
     if (unJamFirst)
         if (!UnJam(cls, false))
             return false;
