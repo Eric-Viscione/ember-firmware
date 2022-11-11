@@ -842,8 +842,14 @@ void PrintEngine::SendMotorCommand(HighLevelMotorCommand command)
             break;
             
         case Separate:
-            success = _motor.Separate(_cls);
-            StartMotorTimeoutTimer(GetSeparationTimeoutSec());
+            if(((PrinterStatus._currentLayer%4) == 1) ||((_printerStatus._currentLayer%4) == 3))
+            {
+                success = _motor.Separate(_cls);  //modified by passing through the current layer variable
+                StartMotorTimeoutTimer(GetSeparationTimeoutSec());
+            }
+            else{
+                success == true ;
+            }
             break;
                         
         case Approach:
