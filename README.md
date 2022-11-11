@@ -4,6 +4,12 @@ Version 3.2
 Copyright © 2016 Autodesk, Inc. All rights reserved.
 
 ###Repository Overview
+Multi-Material Branch by Eric Viscione (Ericjviscione@gmail.com) for a University of Massachusetts Research project on multi-material resin 3D printing
+Thanks to: Professor Christopher Hansen, Darshil Shah
+Follow the standard flashing firmware procedure to load the new firmware onto Ember printer. Remove the "Matlab and External Control" folder. This contains documentation, A matlab script to create files for the multi-material printer and the arduino program that controls the external aspects of the process. 
+
+Once Paper is published will add link which have electrical schemtics and more information on operation of the printer and components. 
+
 The [Autodesk Ember](https://ember.autodesk.com/) 3D printer uses the firmware here to control its operation and communicate with applications.  The components in the C++ and ruby folders run on the main (Sitara) processor under Linux and the others run on two satelite AVRs that control the motors and front panel.
 
 Folder  | Contents
